@@ -1,10 +1,16 @@
-﻿namespace WebApplication1
+﻿using WebApplication1.Data.Interfaces;
+using WebApplication1.Data.Mocks;
+
+namespace WebApplication1
 {
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddTransient <ICategores, MockCategorys>();
+            services.AddTransient<IItems, MockItems>();
+
+            services.AddMvc(option => option.EnableEndpointRouting = false);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -13,5 +19,6 @@
             app.UseStatusCodePages();
             app.UseMvcWithDefaultRoute();
         }
+
     }
 }

@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Interfaces\" />
-    <Folder Include="Data\Mocks\" />
     <Folder Include="Views\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
