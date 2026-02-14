@@ -7,10 +7,14 @@
 @{
 	foreach (var item in Model)
 	{
-		<div>
-			<h3>Модель: @item.Name</h3>
-			<p>Цена:@item.Price.ToString("c") </p>
-			<p>Категория: @item.category.Name</p>
+		<div class="item">
+			<img src="@item.img" />
+			<div class="data">
+				<h3>Модель: @item.Name</h3>
+				<p>Цена:@item.Price.ToString("c") </p>
+				<p>Категория: @item.category.Name</p>
+				<p>Описание: @item.Description</p>
+			</div>
 		</div>
 	}
 }
