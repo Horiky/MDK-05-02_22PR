@@ -8,12 +8,13 @@ namespace WebApplication1.Controllers
     {
         private IItems IAllItems;
         private ICategores IAllCategores;
+        VMItems VMItems = new VMItems();
         public ItemsController(IItems IAllItems, ICategores IAllCategores)
         {
             this.IAllItems = IAllItems;
             this.IAllCategores = IAllCategores;
         }
-        public ViewResult List()
+        public ViewResult List(int id = 0)
         {
             ViewBag.Title = "Страница с предметами";
             VMItems.Items = IAllItems.AllItems;
