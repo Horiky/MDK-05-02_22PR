@@ -6,11 +6,11 @@ namespace WebApplication1.Data.Common
     public class Conection
     {
         readonly static string ConnectionData = "server=127.0.0.1;port=3306;database=23pr;uid=root;pwd=;";
-        public static MySqlConnection MySql0pen()
+        public static MySqlConnection MySqlOpen()
         {
-            MySqlConnection NewMySqlConnection = new MySqlConnection(ConnectionData);
-            NewMySqlConnection.Open();
-            return NewMySqlConnection;
+            MySqlConnection Connection = new MySqlConnection(ConnectionData);
+           Connection.Open();
+            return Connection;
         }
 
         public static MySqlDataReader MySqlQuery(string Query, MySqlConnection Connection)
