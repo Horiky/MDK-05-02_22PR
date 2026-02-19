@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data.Interfaces;
+using WebApplication1.Data.ViewModell;
 
 namespace WebApplication1.Controllers
 {
@@ -15,8 +16,12 @@ namespace WebApplication1.Controllers
         public ViewResult List()
         {
             ViewBag.Title = "Страница с предметами";
-            var cars = IAllItems.AllItems;
-            return View(cars);
+            VMItems.Items = IAllItems.AllItems;
+            VMItems.Categorys = IAllCategores.AllCategorys;
+            VMItems.SelectCategory = id;
+            
+
+            return View(VMItems);
         }
     }
 }

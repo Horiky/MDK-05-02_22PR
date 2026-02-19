@@ -20,7 +20,7 @@ namespace WebApplication1.Data.DataBase
                 // открываем подключение к базе данных
                 MySqlConnection MySqlConnection = Conection.MySqlOpen();
                 // получаем данные из таблицы предметов
-                MySqlDataReader ItemsData = Conection.MySqlQuery("SELECT * FROM 23pr.items ORDER BY `Name`;", MySqlConnection);
+                MySqlDataReader ItemsData = Conection.MySqlQuery("SELECT * FROM 23pr.Items ORDER BY `name`;", MySqlConnection);
                 // читаем данные
                 while (ItemsData.Read())
                 {
@@ -35,10 +35,11 @@ namespace WebApplication1.Data.DataBase
                         category = ItemsData.IsDBNull(5) ? null : Categorys.Where(x => x.Id == ItemsData.GetInt32(5)).First()
                     });
                     // закрываем соединение
-                    MySqlConnection.Close();
+                  
                  
 
                 }
+                MySqlConnection.Close();
                 return items;
             }
         }
