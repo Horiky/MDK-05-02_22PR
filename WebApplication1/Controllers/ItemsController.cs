@@ -17,10 +17,21 @@ namespace WebApplication1.Controllers
         public ViewResult List(int id = 0)
         {
             ViewBag.Title = "Страница с предметами";
-            VMItems.Items = IAllItems.AllItems;
+
+
+            var allItems = IAllItems.AllItems;
+ 
+            if (id != 0)
+            {
+                VMItems.Items = allItems.Where(x => x.category.Id == id);
+            }
+            else
+            {
+                VMItems.Items = allItems;
+            }
+
             VMItems.Categorys = IAllCategores.AllCategorys;
             VMItems.SelectCategory = id;
-            
 
             return View(VMItems);
         }

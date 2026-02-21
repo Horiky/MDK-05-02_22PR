@@ -12,19 +12,20 @@ namespace WebApplication1.Data.Mocks
             {
                 return new List<Categorys>
                 {
-                    new Categorys
-                    {
-                        Id = 0,
-                        Name = "печи",
-                        Description = "Печь прибор для заморозки блюд",
-
-                    },
-                    new Categorys
+                      new Categorys
                     {
                         Id = 1,
                         Name = "Чайники",
                         Description = "Чайники греют воду и душу",
+                    },
+                    new Categorys
+                    {
+                        Id = 2,
+                        Name = "печи",
+                        Description = "Печь прибор для заморозки блюд",
+
                     }
+                  
                 };
             }
         }

@@ -53,7 +53,7 @@ namespace WebApplication1.Data.Mocks
                         Description = "Благодаря черному корпусу работает лучше",
                         img = "https://c.dns-shop.ru/thumb/st4/fit/320/250/719c3a1544acc574f4f03ca2bf1f2d6a/41c5b8c3c552a0e4a0af35916ceb8d43bc2ec6e982b3212eeefad4d099314bef.jpg",
                         Price = 6000,
-                        category = _category.AllCategorys.Where(x => x.Id == 0).First()
+                        category = _category.AllCategorys.Where(x => x.Id == 2).First()
                     },
             };
         }
