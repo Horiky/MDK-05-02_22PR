@@ -35,5 +35,19 @@ namespace WebApplication1.Controllers
 
             return View(VMItems);
         }
+        public ActionResult Basket(int idItem = -1)
+        {
+            if (idItem != -1)
+            {
+                if(count == 0)
+                {
+                    Startup.BasketItem.Remove(Startup.BasketItem.Find(x => x.Id == idItem));
+                }
+                else 
+                    Startup.BasketItem.Find(x => x.Id == idItem).Count = count;
+               
+            }
+            return Json(Startup.BasketItem);
+        }
     }
 }
