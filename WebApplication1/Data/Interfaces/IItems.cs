@@ -5,5 +5,6 @@ namespace WebApplication1.Data.Interfaces
     public interface IItems
     {
         public IEnumerable<Items> AllItems { get; }
+        public int Add (Items item);
     }
 }
