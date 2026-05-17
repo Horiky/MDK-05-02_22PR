@@ -73,3 +73,21 @@ body {
             text-align: center;
             float: left;
         }
+form {
+    box-shadow: 2px 2px 2px #00000038;
+    width: 400px;
+    padding: 10px;
+    margin: 25px auto;
+}
+
+    form div {
+        margin-bottom: 10px;
+    }
+
+    form input {
+        width: -webkit-fill-available;
+    }
+
+    form select {
+        width: -webkit-fill-available;
+    }
