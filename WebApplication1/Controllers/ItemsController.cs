@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data.Interfaces;
+using WebApplication1.Data.Models;
 using WebApplication1.Data.ViewModell;
 
 namespace WebApplication1.Controllers
@@ -48,6 +49,13 @@ namespace WebApplication1.Controllers
                
             }
             return Json(Startup.BasketItem);
+        }
+        [HttpGet]
+        public ViewResult Add()
+        {
+            IEnumerable<Categorys> Categories = AllCategorys.AllCategories;
+
+            return View(Categories);
         }
     }
 }
