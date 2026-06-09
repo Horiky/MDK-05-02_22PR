@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting.Internal;
 using WebApplication1.Data.Interfaces;
 using WebApplication1.Data.Models;
 using WebApplication1.Data.ViewModell;
@@ -8,21 +7,25 @@ namespace WebApplication1.Controllers
 {
     public class ItemsController : Controller
     {
-        private IItems IAllItems;
-        private ICategores IAllCategores;
-        VMItems VMItems = new VMItems();
-        public ItemsController(IItems IAllItems, ICategores IAllCategores)
+        private readonly IItems IAllItems;
+        private readonly ICategores IAllCategores;
+        private readonly IWebHostEnvironment hostingEnvironment;
+        private VMItems VMItems = new VMItems();
+
+        // Единый конструктор
+        public ItemsController(IItems IAllItems, ICategores IAllCategores, IWebHostEnvironment environment)
         {
             this.IAllItems = IAllItems;
             this.IAllCategores = IAllCategores;
+            this.hostingEnvironment = environment;
         }
+
         public ViewResult List(int id = 0)
         {
             ViewBag.Title = "Страница с предметами";
 
-
             var allItems = IAllItems.AllItems;
- 
+
             if (id != 0)
             {
                 VMItems.Items = allItems.Where(x => x.category.Id == id);
@@ -37,78 +40,67 @@ namespace WebApplication1.Controllers
 
             return View(VMItems);
         }
-        public ActionResult Basket(int idItem = -1)
+
+        public ActionResult Basket(int idItem = -1, int count = 1)
         {
             if (idItem != -1)
             {
-                if(count == 0)
+                var existingItem = Startup.BasketItem.Find(x => x.Id == idItem);
+
+                if (count == 0)
                 {
-                    Startup.BasketItem.Remove(Startup.BasketItem.Find(x => x.Id == idItem));
+                    if (existingItem != null)
+                        Startup.BasketItem.Remove(existingItem);
                 }
-                else 
-                    Startup.BasketItem.Find(x => x.Id == idItem).Count = count;
-               
+                else
+                {
+                    if (existingItem != null)
+                        existingItem.Count = count;
+                    else
+                    {
+                        var item = IAllItems.AllItems.FirstOrDefault(x => x.Id == idItem);
+                        if (item != null)
+                            Startup.BasketItem.Add(new ItemBasket(count, item));
+                    }
+                }
             }
             return Json(Startup.BasketItem);
         }
+
         [HttpGet]
         public ViewResult Add()
         {
-            IEnumerable<Categorys> Categories = AllCategorys.AllCategories;
-
+            IEnumerable<Categorys> Categories = IAllCategores.AllCategorys;
             return View(Categories);
         }
-        /// <summary>
-        /// Метод добавления предмета
-        /// </summary>
-        /// <param name="name">Наименование предмета</param>
-        /// <param name="description">Описание предмета</param>
-        /// <param name="files">Изображение</param>
-        /// <param name="price">Цена</param>
-        /// <param name="idCategory">Код категории</param>
-        /// <returns></returns>
+
         [HttpPost]
         public RedirectResult Add(string name, string description, IFormFile files, float price, int idCategory)
         {
-            // если присутствует файл
             if (files != null)
             {
-                // получаем путь к папке
                 var uploads = Path.Combine(hostingEnvironment.WebRootPath, "img");
-                // получаем путь к файлу
                 var filePath = Path.Combine(uploads, files.FileName);
-                // Копируем файл
-                files.CopyTo(new FileStream(filePath, FileMode.Create));
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    files.CopyTo(stream);
+                }
             }
-            // Создаём новый предмет, заполняем данные
+
             Items newItems = new Items();
             newItems.Name = name;
             newItems.Description = description;
-            newItems.Img = files.FileName;
+            newItems.img = files != null ? files.FileName : "";
             newItems.Price = Convert.ToInt32(price);
-            newItems.Categorys = new Categorys() { Id = idCategory };
-            // Вызываем метод добавления
+            newItems.category = new Categorys() { Id = idCategory };
+
             int id = IAllItems.Add(newItems);
-            // Перенаправляем пользователя на страницу изменения
             return Redirect("/Items/Update?id=" + id);
         }
-        // <summary> Предоставляет сведения о среде размещения веб-сайтов, в которой вы ...
-        private readonly IHostingEnvironment hostingEnvironment;
+    }
 
-        // <summary> Интерфейс объектов
-        private Items IAllItems;
-        // <summary> Интерфейс категорий
-        private ICategorys IAllCategories;
-        // <summary> Создаём модель, хранящую в себе данные
-        VMItems VMItems = new VMItems();
-
-        // <summary> Конструктор принимающий параметры
-        public ItemsController(IItems IAllItems, ICategorys IAllCategories, IHostingEnvironment environment)
-        {
-            this.IAllItems = IAllItems;
-            this.IAllCategories = IAllCategories;
-            // запоминаем сведения
-            this.hostingEnvironment = environment;
-        }
+    public class Startup
+    {
+        public static List<ItemBasket> BasketItem = new List<ItemBasket>();
     }
 }

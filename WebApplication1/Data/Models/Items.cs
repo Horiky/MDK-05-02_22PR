@@ -8,16 +8,20 @@
         public string img { get; set; }
         public int Price { get; set; }
         public Categorys category { get; set; }
-        public Items(Items item = null)
+
+        public Items() { }
+
+        public Items(Items item)
         {
-            this.Id = item.Id;
-            this.Name = item.Name;
-            this.Description = item.Description;
-            this.img = item.img;
-            this.category = item.category;
-            this.Price = item.Price;
+            if (item != null)
+            {
+                this.Id = item.Id;
+                this.Name = item.Name;
+                this.Description = item.Description;
+                this.img = item.img;
+                this.category = item.category;
+                this.Price = item.Price;
+            }
         }
     }
 }
-   
-

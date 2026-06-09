@@ -2,13 +2,13 @@
 using WebApplication1.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Net.WebRequestMethods;
 
 namespace WebApplication1.Data.Mocks
 {
     public class MockItems : IItems
     {
         public ICategores _category = new MockCategorys();
+
         public IEnumerable<Items> AllItems
         {
             get
@@ -55,7 +55,20 @@ namespace WebApplication1.Data.Mocks
                         Price = 6000,
                         category = _category.AllCategorys.Where(x => x.Id == 2).First()
                     },
-            };
+                };
+            }
         }
+
+        // Добавленный метод Add
+        public int Add(Items item)
+        {
+            // Для мок-объекта просто возвращаем новый ID (максимальный + 1)
+            int newId = AllItems.Max(x => x.Id) + 1;
+            item.Id = newId;
+
+            // В мок-реализации ничего не сохраняем, просто возвращаем ID
+            // При желании можно добавить в список, но список только для чтения
+            return newId;
         }
-    } }
+    }
+}

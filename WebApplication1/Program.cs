@@ -16,7 +16,7 @@ app.UseStatusCodePages();
 app.UseStaticFiles();
 app.UseMvcWithDefaultRoute();
 app.Run();
-public class Startup
+public static class Startup
 {
-    public static List<ItemBasket> BasketItem = new List<ItemBasket>();
+    public static List<ItemBasket> BasketItem { get; set; } = new List<ItemBasket>();
 }
