@@ -97,10 +97,61 @@ namespace WebApplication1.Controllers
             int id = IAllItems.Add(newItems);
             return Redirect("/Items/Update?id=" + id);
         }
+
+
+        [HttpGet]
+        public ViewResult Update(int id)
+        {
+            Items item = IAllItems.GetItem(id);
+            ViewBag.Categories = IAllCategores.AllCategorys;
+            return View(item);
+        }
+
+        // POST: /Items/Update
+        [HttpPost]
+        public RedirectResult Update(int id, string name, string description, IFormFile files, float price, int idCategory)
+        {
+            Items item = IAllItems.GetItem(id);
+
+            if (item != null)
+            {
+                item.Name = name;
+                item.Description = description;
+                item.Price = Convert.ToInt32(price);
+                item.category = new Categorys() { Id = idCategory };
+
+       
+                if (files != null)
+                {
+                    var uploads = Path.Combine(hostingEnvironment.WebRootPath, "img");
+                    var filePath = Path.Combine(uploads, files.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        files.CopyTo(stream);
+                    }
+                    item.img = files.FileName;
+                }
+
+                IAllItems.Update(item);
+            }
+
+            return Redirect("/Items/List");
+        }
+
+ 
+
+
+        [HttpGet]
+        public RedirectResult Delete(int id)
+        {
+            IAllItems.Delete(id);
+            return Redirect("/Items/List");
+        }
     }
 
     public class Startup
     {
         public static List<ItemBasket> BasketItem = new List<ItemBasket>();
     }
+
 }
